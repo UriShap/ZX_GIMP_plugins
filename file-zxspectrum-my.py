@@ -185,10 +185,9 @@ def load_bitmap(pixel_setter, data):
             bright = 8 if attribute & 0x40 else 0
             ink = attribute & 0x07
             paper = (attribute & 0x38) // 8
+	    if ink==paper: ink=16
             for pix in range(7, -1, -1):
-		if ink==paper:
-                   ink=16
-                pixel_setter((col * 8 + pix  , line), COLORS[ ink | bright ]  if byte & 0x01 else COLORS[ paper | bright ] )
+                pixel_setter((col * 8 + pix  , line), COLORS[ (ink | bright) if ink < 16 else 16  ]  if byte & 0x01 else COLORS[ paper | bright ] )
                 byte >>= 1
         offset += 32
 
